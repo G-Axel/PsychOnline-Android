@@ -24,8 +24,9 @@
     },
     {
       "name": "flixel",
-      "type": "haxelib",
-      "version": "5.8.0"
+      "type": "git",
+      "ref": "main",
+      "url": "https://github.com/ChanceXML/flixel-5.8.0"
     },
     {
       "name": "flixel-addons",
