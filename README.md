@@ -21,11 +21,6 @@
 * [Documentation](https://github.com/Snirozu/Funkin-Psych-Online/wiki)
 * [Server Source Code](https://github.com/Snirozu/Funkin-Online-Server)
 
-## Contributors!
-<a href="https://github.com/Snirozu/Funkin-Psych-Online/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Snirozu/Funkin-Psych-Online" />
-</a>
-
 Be free to contribute your code to this project! [(Before you PR, read this!)](https://github.com/Snirozu/Funkin-Psych-Online/src/branch/main/CONTRIBUTING.md)
 
 ###### Generated with [contrib.rocks](https://contrib.rocks)!
