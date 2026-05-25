@@ -3638,7 +3638,8 @@ class PlayState extends MusicBeatState
                 FlxG.keys.handleAction(FlxKey.D, false);
            }
 	    }
-		#end
+	}
+	#end
 
 	function addIconOffset(icon:HealthIcon, isP1:Bool, i:Int) {
 		switch ((isP1 ? iconP1s : iconP2s).length) {
