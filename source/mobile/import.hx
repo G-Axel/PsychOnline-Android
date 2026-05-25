@@ -66,11 +66,11 @@ import mobile.backend.assets.*;
 import mobile.backend.utils.*;
 
 // Funkin Imports
-import funkin.backend.system.Controls;
-import funkin.game.PlayState;
-import funkin.options.Options;
-import funkin.backend.assets.Paths; 
-import funkin.editors.charter.Charter;
+import backend.Controls;
+import states.PlayState;
+import options.Option;
+import backend.ClientPrefs;
+import backend.Paths; 
 
 // OpenFL Imports
 import openfl.Lib;
