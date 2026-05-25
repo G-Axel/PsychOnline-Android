@@ -30,6 +30,21 @@ import haxe.io.Path;
 import sys.io.File;
 import sys.io.Process;
 
+#if mobile
+import mobile.backend.utils.MobileTrace;
+import GlobalInputManager;
+#end
+	
+#if android
+import extension.androidtools.content.Context;
+import extension.androidtools.os.Build;
+import extension.androidtools.Permissions;
+import extension.androidtools.os.Environment;
+import extension.androidtools.Settings;
+import mobile.backend.assets.Files;
+#end
+	
+
 class Main extends Sprite
 {
 	var game = {
@@ -115,7 +130,62 @@ class Main extends Sprite
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 		}
 
+		#if android
+	    checkPermissions();
+
+    	if (Permissions.hasManageAllFiles()) {
+		    finalizeSetup();
+	    }
+        #elseif ios
+     	    finalizeSetup();
+        #end
+
+		#if mobile
+		MobileTrace.enabled = true;
+		#end
+
+		#if mobile
+		FlxG.plugins.add(new GlobalInputManager());
+        #end
+
 		setupGame();
+	}
+
+	#if android
+	private function onResult(_):Void {
+		if (extension.androidtools.Permissions.hasManageAllFiles()) {
+			finalizeSetup();
+			openfl.Lib.current.stage.removeEventListener(openfl.events.Event.ACTIVATE, onResult);
+		}
+	}
+    
+	private function checkPermissions():Void {
+		if (!extension.androidtools.Permissions.hasManageAllFiles()) {
+            haxe.Timer.delay(function() {
+               openfl.Lib.current.stage.addEventListener(openfl.events.Event.ACTIVATE, onResult);
+
+            extension.androidtools.Permissions.requestManageAllFiles(); 
+			}, 2000);
+		} else {
+			finalizeSetup();
+		}
+	}
+	#end	
+
+	private function finalizeSetup():Void {
+		var base = mobile.backend.assets.Files.getAssetsDir();
+		
+		if (!base.endsWith("/")) base += "/";
+
+		var firstRun = !sys.FileSystem.exists(base + "assets/");
+
+		if (firstRun)
+		{
+			trace("First run detected. Starting file initialization...");
+			mobile.backend.assets.Files.init();
+		} else {
+			trace("Assets already initialized at: " + base);
+		}
 	}
 
 	private function setupGame():Void
