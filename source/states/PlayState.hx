@@ -103,6 +103,13 @@ import psychlua.HScript;
 import tea.SScript;
 #end
 
+#if mobile
+import mobile.controls.PauseButton;
+import mobile.controls.HitBox;
+import flixel.input.keyboard.FlxKey;
+import options.Option;
+#end
+
 import online.backend.schema.Player;
 
 @:build(online.backend.Macros.getSetForwarder())
@@ -124,6 +131,10 @@ class PlayState extends MusicBeatState
 		['Sick!', 1], //From 90% to 99%
 		['Perfect!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
 	];
+	
+	#if mobile
+	public var hitbox:HitBox;
+	#end
 
 	//event variables
 	private var isCameraOnForcedPos:Bool = false;
@@ -948,6 +959,17 @@ class PlayState extends MusicBeatState
 
 			Mods.currentModDirectory = oldModDir;
 		});
+		#end
+
+		#if mobile
+		// hitbox.
+		hitbox = new HitBox(Options.hitboxStyle, Options.hintStyle);
+        add(hitbox);
+        hitbox.setupCamera();
+        // pausebutton.
+		var androidPause = new mobile.controls.Pause();
+        add(androidPause);
+        androidPause.setPauseButton('true');
 		#end
 
 		#if HSCRIPT_ALLOWED
@@ -3585,7 +3607,38 @@ class PlayState extends MusicBeatState
 		if (Conductor.songPosition >= FlxG.sound.music.length) {
 			finishSong();
 		}
-	}
+
+		#if mobile
+		if (hitbox != null) {
+            if (hitbox.UP.justPressed) {
+                FlxG.keys.handleAction(FlxKey.W, true);
+            }
+            if (hitbox.UP.justReleased) {
+                FlxG.keys.handleAction(FlxKey.W, false);
+            }
+
+            if (hitbox.DOWN.justPressed) {
+                FlxG.keys.handleAction(FlxKey.S, true);
+            }
+            if (hitbox.DOWN.justReleased) {
+                FlxG.keys.handleAction(FlxKey.S, false);
+            }
+
+            if (hitbox.LEFT.justPressed) {
+                FlxG.keys.handleAction(FlxKey.A, true);
+            }
+            if (hitbox.LEFT.justReleased) {
+                FlxG.keys.handleAction(FlxKey.A, false);
+            }
+
+            if (hitbox.RIGHT.justPressed) {
+               FlxG.keys.handleAction(FlxKey.D, true);
+            }
+            if (hitbox.RIGHT.justReleased) {
+                FlxG.keys.handleAction(FlxKey.D, false);
+           }
+	    }
+		#end
 
 	function addIconOffset(icon:HealthIcon, isP1:Bool, i:Int) {
 		switch ((isP1 ? iconP1s : iconP2s).length) {
