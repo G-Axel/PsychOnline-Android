@@ -85,19 +85,33 @@ class Main extends Sprite
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
 	public static function main():Void
-	{
-		if (Path.normalize(Sys.getCwd()) != Path.normalize(lime.system.System.applicationDirectory)) {
-			Sys.setCwd(lime.system.System.applicationDirectory);
+    {
+     	#if !android
+    	if (Path.normalize(Sys.getCwd()) != Path.normalize(lime.system.System.applicationDirectory)) {
+     		Sys.setCwd(lime.system.System.applicationDirectory);
 
-			if (Path.normalize(Sys.getCwd()) != Path.normalize(lime.system.System.applicationDirectory)) {
-				Lib.application.window.alert("Your path is either not run from the game directory,\nor contains illegal UTF-8 characters!\n\nRun from: "
-					+ Sys.getCwd()
-					+ "\nExpected path: "
-					+ lime.system.System.applicationDirectory,
-					"Invalid Runtime Path!");
-				Sys.exit(1);
-			}
-		}
+	    	if (Path.normalize(Sys.getCwd()) != Path.normalize(lime.system.System.applicationDirectory)) {
+       			Lib.application.window.alert(
+	     			"Your path is either not run from the game directory,\nor contains illegal UTF-8 characters!\n\nRun from: "
+	      			+ Sys.getCwd()
+		     		+ "\nExpected path: "
+	     			+ lime.system.System.applicationDirectory,
+		    		"Invalid Runtime Path!"
+	     		);
+		    	Sys.exit(1);
+	     	}
+     	}
+     	#elseif android
+    	var androidDir = VERSION.SDK_INT >= 30
+     		? Context.getObbDir()
+	       	: Context.getExternalFilesDir();
+
+     	if (androidDir != null) {
+	     	if (!sys.FileSystem.exists(androidDir)) {
+	     		sys.FileSystem.createDirectory(androidDir);
+	    	}
+	    }
+    	#end
 		
 		// Lib.current.addChild(view3D = new online.away.View3DHandler());
 		Lib.current.addChild(new online.gui.Alert());
@@ -131,26 +145,6 @@ class Main extends Sprite
 		}
 
 		setupGame();
-	}
-
-	public function create() {
-		#if android
-	    checkPermissions();
-
-    	if (Permissions.hasManageAllFiles()) {
-		    finalizeSetup();
-	    }
-        #elseif ios
-     	    finalizeSetup();
-        #end
-
-		#if mobile
-		MobileTrace.enabled = true;
-		#end
-
-		#if mobile
-		FlxG.plugins.add(new GlobalInputManager());
-        #end
 	}
 
 	#if android
@@ -239,7 +233,7 @@ class Main extends Sprite
 			fpsVar.visible = ClientPrefs.data.showFPS;
 		}
 
-		#if linux
+		#if linux && !mobile
 		Lib.current.stage.window.setIcon(Image.fromFile("icon.png"));
 		#end
 
@@ -247,6 +241,19 @@ class Main extends Sprite
 		FlxG.autoPause = false;
 		FlxG.mouse.visible = false;
 		#end
+
+		#if android
+	    checkPermissions();
+
+    	if (Permissions.hasManageAllFiles()) {
+		    finalizeSetup();
+	    }
+        #end
+
+		#if mobile
+		MobileTrace.enabled = true;
+		FlxG.plugins.add(new GlobalInputManager());
+        #end
 		
 		//haxe errors caught by openfl
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, (e) -> {
