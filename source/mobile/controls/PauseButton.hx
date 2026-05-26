@@ -57,7 +57,7 @@ class Pause extends FlxGroup
     pauseButton.visible = isButtonActive;
     pauseCircle.visible = isButtonActive;
 
-    if (ClientPrefs.pauseButton == false) {
+    if (ClientPrefs.data.pauseButton == false) {
         pauseButton.alpha = 0;
         pauseCircle.alpha = 0;
     } else {
@@ -88,11 +88,11 @@ class Pause extends FlxGroup
 
         var game = PlayState.instance;
 
-        if (touchedPause && !game.paused && game.health > 0)
+        if (touchedPause && !game.paused && game.canPause && !game.endingSong)
         {
             pauseButton.animation.play('confirm');
             
-            game.pauseGame();
+            game.openPauseMenu(); 
         }
     }
 }
