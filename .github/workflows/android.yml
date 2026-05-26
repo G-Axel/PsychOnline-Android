@@ -71,7 +71,7 @@ jobs:
 
           haxelib install hxcpp > /dev/null --quiet
           haxelib install hmm --quiet
-          haxelib run hmm install
+          haxelib run hmm install --quiet
           
           printf "%s\n%s\n%s\n" \
             "$ANDROID_HOME" \
