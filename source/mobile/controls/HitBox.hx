@@ -29,7 +29,7 @@ class HitBox extends FlxSpriteGroup {
     public var UP(get, never):HitboxButton; inline function get_UP() return buttonUp;
     public var RIGHT(get, never):HitboxButton; inline function get_RIGHT() return buttonRight;
 
-    public function new(hitboxStyle:String = "Simple", hintStyle:String = "Simple") {
+    public function new(hitboxStyle:String = 'Simple', hintStyle:String = 'Simple') {
         super();
 
         var w:Int = Std.int(FlxG.width / 4);
