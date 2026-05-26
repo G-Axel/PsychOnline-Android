@@ -9,7 +9,6 @@ class PromptSubState extends MusicBeatSubstate
 	var noText:Alphabet;
     var callback:Bool->Void;
 
-	// Week -1 = Freeplay
 	public function new(title:String, posttext:String, callback:Bool->Void)
 	{
 		super();
@@ -21,7 +20,7 @@ class PromptSubState extends MusicBeatSubstate
 		bg.scrollFactor.set();
 		add(bg);
 
-		var tooLong:Float = 0.7; //Fucking Winter Horrorland
+		var tooLong:Float = 0.7;
 
 		var text:Alphabet = new Alphabet(0, 180, title, true);
 		text.scaleX = tooLong;
@@ -57,6 +56,7 @@ class PromptSubState extends MusicBeatSubstate
 	}
 
     var inputDelay:Float = 0.1;
+
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
@@ -75,31 +75,62 @@ class PromptSubState extends MusicBeatSubstate
             inputCheck();
 	}
 
-    function inputCheck() {
+    function inputCheck()
+	{
+		#if mobile
+		for (touch in FlxG.touches.list)
+		{
+			if (touch.justPressed)
+			{
+				if (touch.overlaps(yesText))
+				{
+					onYes = true;
+
+					FlxG.sound.play(Paths.sound('cancelMenu'), 1);
+					close();
+					callback(true);
+				}
+
+				if (touch.overlaps(noText))
+				{
+					onYes = false;
+
+					FlxG.sound.play(Paths.sound('cancelMenu'), 1);
+					close();
+					callback(false);
+				}
+			}
+		}
+        #end
 		if(controls.UI_LEFT_P || controls.UI_RIGHT_P) {
 			FlxG.sound.play(Paths.sound('scrollMenu'), 1);
 			onYes = !onYes;
 			updateOptions();
 		}
+
 		if(controls.BACK) {
 			FlxG.sound.play(Paths.sound('cancelMenu'), 1);
 			close();
             callback(false);
-		} else if(controls.ACCEPT) {
+		}
+		else if(controls.ACCEPT) {
 			FlxG.sound.play(Paths.sound('cancelMenu'), 1);
 			close();
             callback(onYes);
 		}
     }
 
-	function updateOptions() {
+	function updateOptions()
+	{
 		var scales:Array<Float> = [0.75, 1];
 		var alphas:Array<Float> = [0.6, 1.25];
 		var confirmInt:Int = onYes ? 1 : 0;
 
 		yesText.alpha = alphas[confirmInt];
 		yesText.scale.set(scales[confirmInt], scales[confirmInt]);
+
 		noText.alpha = alphas[1 - confirmInt];
 		noText.scale.set(scales[1 - confirmInt], scales[1 - confirmInt]);
 	}
 }
+``` 01
