@@ -11,6 +11,9 @@ import flixel.math.FlxPoint;
 
 import states.StoryMenuState;
 import states.FreeplayState;
+#if mobile
+import flixel.input.android.*;
+#end
 
 // i hate how this state is coded, can we kill shadoemaryo
 
@@ -236,11 +239,11 @@ class GameOverSubstate extends MusicBeatSubstate
 			}
 		}
 		else {
-			if (controls.ACCEPT) {
+			if (controls.ACCEPT #if mobile || FlxG.mouse.justPressed #end) {
 				endBullshit();
 			}
 
-			if (controls.BACK) {
+			if (controls.BACK #if mobile || FlxG.android.justPressed.BACK #end) {
 				#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 				FlxG.sound.music.stop();
 				PlayState.deathCounter = 0;
