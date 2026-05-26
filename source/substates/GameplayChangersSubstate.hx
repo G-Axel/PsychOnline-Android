@@ -7,9 +7,16 @@ import online.backend.Waiter;
 import online.GameClient;
 import objects.AttachedText;
 import objects.CheckboxThingie;
+#if mobile
+import mobile.controls.VirtualPad;
+import mobile.controls.FlxButton;
+#end
 
 class GameplayChangersSubstate extends MusicBeatSubstate
 {
+	#if mobile
+    public var virtualPad:VirtualPad;
+    #end
 	private var curOption:GameplayOption = null;
 	private var curSelected:Int = 0;
 	private var optionsArray:Array<Dynamic> = [];
@@ -180,6 +187,11 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		if (GameClient.isConnected()) {
 			GameClient.callbacks.onChange(GameClient.room.state.gameplaySettings, receiveChange);
 		}
+		
+		#if mobile
+        virtualPad = new VirtualPad(FULL, A_B);
+        add(virtualPad);
+        #end
 	}
 
 	function receiveChange() {
