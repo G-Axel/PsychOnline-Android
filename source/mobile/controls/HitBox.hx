@@ -166,9 +166,9 @@ class HitboxButton extends FlxSprite {
         var effectivePressed:Bool = pressed || (parentButton != null && parentButton.pressed);
 
         if (isHint) {
-            alpha = effectivePressed ? 0.00001 : Options.hintOpacity;
+            alpha = effectivePressed ? 0.00001 : ClientPrefs.hintOpacity;
         } else {
-            alpha = effectivePressed ? Options.hitboxOpacity : 0.00001;
+            alpha = effectivePressed ? ClientPrefs.hitboxOpacity : 0.00001;
         }
 
         super.update(elapsed);
