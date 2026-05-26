@@ -55,10 +55,11 @@ class VirtualPad extends FlxSpriteGroup
 		FlxG.cameras.add(virtualpadCamera, false);
 		this.cameras = [virtualpadCamera];
 
-    atlasFrames = FlxAtlasFrames.fromSpriteSheetPacker(
-			'assets/images/menus/virtual-input.png',
-            'assets/images/menus/virtual-input.txt');
-    }
+        atlasFrames = FlxAtlasFrames.fromSpriteSheetPacker(
+	     'assets/images/menus/virtual-input.png',
+	     'assets/images/menus/virtual-input.txt'
+		);
+		
 		switch (DPad)
 		{
 			case NONE:
