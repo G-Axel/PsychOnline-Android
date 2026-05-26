@@ -1,6 +1,6 @@
 package options;
 
-class MobileOptions extends BaseOptionsMenu
+class MobileSubState extends BaseOptionsMenu
 {
 	public function new()
 	{
@@ -17,14 +17,14 @@ class MobileOptions extends BaseOptionsMenu
 			'Choose the visual style for the hitbox.',
 			'hitboxStyle',
 			'string',
-			['Simple', 'Classic']);
+			['Simple', 'Gradient']);
 		addOption(option);
 
 		var option:Option = new Option('Hint Style',
 			'Choose the visual style for the hints.',
 			'hintStyle',
 			'string',
-			['Simple', 'Classic']);
+			['Simple', 'Gradient']);
 		addOption(option);
 
 		var option:Option = new Option('Hitbox Opacity',
