@@ -122,7 +122,7 @@ jobs:
          if [ "${GITHUB_REF##*/}" = "dev" ]; then
              haxelib run lime build android -clean -D DEVBRANCH ${{ github.event.inputs.android_flags }}
          else
-             haxelib run lime build android -clean ${{ github.event.inputs.android_flags }}
+             haxelib run lime build Project.xml android -clean ${{ github.event.inputs.android_flags }}
          fi
          
       - name: Save cache
