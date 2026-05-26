@@ -20,9 +20,18 @@ import options.OptionsState;
 import online.gui.Alert;
 import online.util.FileUtils;
 
+#if mobile
+import mobile.controls.VirtualPad;
+import mobile.controls.FlxButton;
+#end
+
 @:access(states.PlayState)
 class PauseSubState extends MusicBeatSubstate
 {
+	#if mobile
+    public var virtualPad:VirtualPad;
+    #end
+	
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
 	var menuItems:Array<String> = [];
@@ -193,6 +202,11 @@ class PauseSubState extends MusicBeatSubstate
 		regenMenu();
 		//cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 		cameras = [PlayState.instance.camOther];
+
+		#if mobile
+        virtualPad = new VirtualPad(UP_DOWN, A_B);
+        add(virtualPad);
+        #end
 	}
 
 	var holdTime:Float = 0;
