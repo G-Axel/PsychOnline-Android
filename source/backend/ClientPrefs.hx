@@ -18,12 +18,12 @@ import states.TitleState;
 // Add a variable here and it will get automatically saved
 class SaveVariables {
 	#if mobile
-	public static var pauseButton:Bool = true;
-	public static var hitboxStyle:String = 'Simple';
-	public static var hintStyle:String = 'Simple';
-	public static var hitboxOpacity:Float = 0.20;
-	public static var hintOpacity:Float = 0.25;
-	public static var virtualPadOpacity:Float = 0.7;
+	public var pauseButton:Bool = true;
+	public var hitboxStyle:String = 'Simple';
+	public var hintStyle:String = 'Simple';
+	public var hitboxOpacity:Float = 0.20;
+	public var hintOpacity:Float = 0.25;
+	public var virtualPadOpacity:Float = 0.7;
 	#end
 	public var downScroll:Bool = false;
 	public var middleScroll:Bool = false;
