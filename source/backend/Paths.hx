@@ -1,6 +1,5 @@
 package backend;
 
-
 import openfl.utils.Future;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import flxanimate.data.SpriteMapData.FlxSpriteMap;
@@ -48,11 +47,11 @@ class Paths
 
 	public static var dumpExclusions:Array<String> =
 	[
-		'assets/music/freakyMenu.$SOUND_EXT',
-		'assets/shared/music/breakfast.$SOUND_EXT',
-		'assets/shared/music/tea-time.$SOUND_EXT',
-		'assets/images/bf1.png',
-		'assets/images/bf2.png',
+		'data/music/freakyMenu.$SOUND_EXT',
+		'data/shared/music/breakfast.$SOUND_EXT',
+		'data/shared/music/tea-time.$SOUND_EXT',
+		'data/images/bf1.png',
+		'data/images/bf2.png',
 	];
 	/// haya I love you for the base cache dump I took to the max
 	public static function clearUnusedMemory() {
@@ -158,17 +157,17 @@ class Paths
 	inline public static function getLibraryPathForce(file:String, library:String, ?level:String)
 	{
 		if(level == null) level = library;
-		var returnPath = '$library:assets/$level/$file';
+		var returnPath = '$library:data/$level/$file';
 		return returnPath;
 	}
 
 	inline public static function getPreloadPath(file:String = '')
 	{
-		return 'assets/$file';
+		return 'data/$file';
 	}
 
 	inline static public function getFolderPath(file:String, folder = "shared")
-		return 'assets/$folder/$file';
+		return 'data/$folder/$file';
 
 	inline public static function getSharedPath(file:String = '')
 		return getFolderPath(file);
@@ -209,7 +208,7 @@ class Paths
 			return file;
 		}
 		#end
-		return 'assets/videos/$key.$VIDEO_EXT';
+		return 'data/videos/$key.$VIDEO_EXT';
 	}
 
 	static public function sound(key:String, ?library:String):Sound
@@ -250,7 +249,7 @@ class Paths
 	inline static public function inst(song:String, songSuffix:String = null):Any
 	{
 		#if html5
-		return 'songs:assets/songs/${formatToSongPath(song)}/Inst.$SOUND_EXT';
+		return 'songs:data/songs/${formatToSongPath(song)}/Inst.$SOUND_EXT';
 		#else
 		var songKey:String = '${formatToSongPath(song)}/Inst' + (songSuffix ?? "");
 		var inst = returnSound('songs', songKey);
@@ -396,7 +395,7 @@ class Paths
 			return file;
 		}
 		#end
-		return 'assets/fonts/$key';
+		return 'data/fonts/$key';
 	}
 
 	public static function fileExists(key:String, type:AssetType, ?ignoreMods:Bool = false, ?library:String = null)
