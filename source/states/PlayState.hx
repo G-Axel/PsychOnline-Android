@@ -3726,7 +3726,7 @@ class PlayState extends MusicBeatState
 		AL.sourcei(handle, AL.DIRECT_FILTER, filter);
 	}
 
-	function openPauseMenu()
+	public function openPauseMenu()
 	{
 		if (!canPause || subState is PauseSubState /*|| GameClient.isConnected()*/)
 			return;
