@@ -13,8 +13,17 @@ import objects.MenuCharacter;
 import substates.GameplayChangersSubstate;
 import substates.ResetScoreSubState;
 
+#if mobile
+import mobile.controls.VirtualPad;
+import mobile.controls.FlxButton;
+#end
+
 class StoryMenuState extends MusicBeatState
 {
+	#if mobile
+    public var virtualPad:VirtualPad;
+    #end
+		
 	public static var weekCompleted:Map<String, Bool> = new Map<String, Bool>();
 
 	var scoreText:FlxText;
@@ -181,6 +190,13 @@ class StoryMenuState extends MusicBeatState
 
 		changeWeek();
 		changeDifficulty();
+
+		#if mobile
+        virtualPad = new VirtualPad(FULL, A_B_X_Y);
+        add(virtualPad);
+		virtualPad.rebind('X', 'CONTROL');
+		virtualPad.rebind('Y', 'R');
+        #end
 
 		super.create();
 	}
