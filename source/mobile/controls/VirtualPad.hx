@@ -162,7 +162,7 @@ class VirtualPad extends FlxSpriteGroup
 
 	override function update(elapsed:Float) 
 	{
-		this.alpha = ClientPrefs.virtualPadOpacity; 
+		this.alpha = ClientPrefs.data.virtualPadOpacity; 
 	    
 		var overlappingPad:Bool = false;
 		var padButtons = [buttonLeft, buttonRight, buttonUp, buttonDown, buttonA, buttonB, buttonC, buttonX, buttonY];
