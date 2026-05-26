@@ -963,7 +963,7 @@ class PlayState extends MusicBeatState
 
 		#if mobile
 		// hitbox.
-		hitbox = new HitBox(Options.hitboxStyle, Options.hintStyle);
+		hitbox = new HitBox(ClientPrefs.data.hitboxStyle, ClientPrefs.data.hintStyle);
         add(hitbox);
         hitbox.setupCamera();
         // pausebutton.
