@@ -29,7 +29,7 @@ class Pause extends FlxGroup
         pauseButton.animation.play('idle');
         pauseButton.setPosition((FlxG.width - pauseButton.width) - 35, 35);
         
-        pauseButton.antialiasing = ClientPrefs.antialiasing; 
+        pauseButton.antialiasing = ClientPrefs.data.antialiasing; 
         
         pauseButton.scrollFactor.set();
         pauseButton.cameras = [PauseCam];
