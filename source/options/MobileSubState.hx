@@ -4,8 +4,8 @@ class MobileSubState extends BaseOptionsMenu
 {
 	public function new()
 	{
-		title = 'Mobile Settings';
-		rpcTitle = 'Mobile Settings Menu';
+		title = 'Mobile';
+		rpcTitle = 'Mobile Menu';
 
 		var option:Option = new Option('Pause Button',
 			'If checked, a pause button will be displayed on screen.',
