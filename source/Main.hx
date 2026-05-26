@@ -130,6 +130,10 @@ class Main extends Sprite
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 		}
 
+		setupGame();
+	}
+
+	public function create() {
 		#if android
 	    checkPermissions();
 
@@ -147,8 +151,6 @@ class Main extends Sprite
 		#if mobile
 		FlxG.plugins.add(new GlobalInputManager());
         #end
-
-		setupGame();
 	}
 
 	#if android
