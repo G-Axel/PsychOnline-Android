@@ -46,7 +46,7 @@ class Files
 	public static function getModsDir():String
 	{
 		#if android
-		return "/storage/emulated/0/.PsychOnline/";
+		return getAndroidStorageDir();
 		#elseif ios
 		var dir = System.documentsDirectory;
 		if (dir != null && !dir.endsWith("/")) dir += "/";
@@ -64,7 +64,7 @@ class Files
 		trace("Assets target path: " + assetsBase);
 		trace("Mods target path: " + modsBase);
 
-		copyFolderOnce("assets", assetsBase + "data/");
+		copyFolderOnce("assets", assetsBase + "assets/");
 	}
 
 	static function copyFolderOnce(folder:String, target:String):Void
