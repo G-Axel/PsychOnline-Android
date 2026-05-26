@@ -9,7 +9,11 @@ import backend.StageData;
 class OptionsState extends MusicBeatState
 {
 	var optionsMap:Map<String, Array<String>> = [
-		'main' => ['Controls', 'Performance', 'Visuals & UI', 'Game'],
+		'main' => [
+		#if mobile 
+		'Mobile', 
+		#end 
+		'Controls', 'Performance', 'Visuals & UI', 'Game'],
 		'visuals' => ['Notes', 'Combo & Rating', 'User Interface', 'Accessibility'],
 		'game' => ['Gameplay', 'Preferences', 'Adjust Audio Delay'],
 	];
@@ -79,6 +83,10 @@ class OptionsState extends MusicBeatState
 		}
 
 		switch(label) {
+			#if mobile
+			case 'Mobile Controls':
+	        	openSubState(new options.MobileSubState());
+			#end
 			case 'Controls':
 				openSubState(new options.ControlsSubState());
 			case 'Performance':
