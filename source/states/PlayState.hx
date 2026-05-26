@@ -108,6 +108,7 @@ import mobile.controls.PauseButton;
 import mobile.controls.HitBox;
 import flixel.input.keyboard.FlxKey;
 import options.Option;
+import backend.ClientPrefs;
 #end
 
 import online.backend.schema.Player;
