@@ -56,8 +56,17 @@ import substates.ResetScoreSubState;
 import sys.FileSystem;
 #end
 
+#if mobile
+import mobile.controls.VirtualPad;
+import mobile.controls.FlxButton;
+#end
+
 class FreeplayState extends MusicBeatState
 {
+	#if mobile
+    public var virtualPad:VirtualPad;
+    #end
+		
 	public static var instance:FreeplayState;
 	public var songs:Array<SongMetadata> = [];
 	public var songsIcons:Map<Int, HealthIcon> = new Map();
@@ -662,6 +671,13 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		updateTexts();
 		searchString = searchString;
+
+        #if mobile
+        virtualPad = new VirtualPad(FULL, A_B_X_Y);
+        add(virtualPad);
+        virtualPad.rebind('X', 'CONTROL');
+        virtualPad.rebind('Y', 'R');
+        #end
 
 		super.create();
 
