@@ -86,7 +86,8 @@ class ResetScoreSubState extends MusicBeatSubstate
 			spr.alpha += elapsed * 2.5;
 		}
 		if(week == -1) icon.alpha += elapsed * 2.5;
-
+		
+		#if desktop
 		if(controls.UI_LEFT_P || controls.UI_RIGHT_P) {
 			FlxG.sound.play(Paths.sound('scrollMenu'), 1);
 			onYes = !onYes;
@@ -101,11 +102,43 @@ class ResetScoreSubState extends MusicBeatSubstate
 					Highscore.resetSong(song, difficulty);
 				} else {
 					Highscore.resetWeek(WeekData.weeksList[week], difficulty);
-				}
+			 	}
 			}
 			FlxG.sound.play(Paths.sound('cancelMenu'), 1);
 			close();
 		}
+		
+		#elseif mobile
+        for (touch in FlxG.touches.list)
+        {
+	        if (touch.justPressed)
+	        {
+		        if (touch.overlaps(yesText))
+	            {
+	     	    	onYes = true;
+	        		updateOptions();
+        
+		           	if(week == -1) {
+	         			Highscore.resetSong(song, difficulty);
+		        	} else {
+		          		Highscore.resetWeek(WeekData.weeksList[week], difficulty);
+	        		}
+  
+		         	FlxG.sound.play(Paths.sound('cancelMenu'), 1);
+	        		close();
+         		}
+
+	          	if (touch.overlaps(noText))
+	        	{
+	         		onYes = false;
+	        		updateOptions();
+   
+		           	FlxG.sound.play(Paths.sound('cancelMenu'), 1);
+		        	close();
+	          	}
+	        }
+        }
+        #end
 		super.update(elapsed);
 	}
 
