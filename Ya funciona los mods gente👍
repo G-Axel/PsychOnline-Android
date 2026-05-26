@@ -41,7 +41,7 @@ class Mods
 	inline public static function getGlobalMods()
 		return globalMods;
 
-	inline public static function pushGlobalMods() // prob a better way to do this but idc
+	inline public static function pushGlobalMods() 
 	{
 		globalMods = [];
 		for(mod in parseList().enabled)
@@ -52,11 +52,20 @@ class Mods
 		return globalMods;
 	}
 
+	inline public static function getModsPath():String
+	{
+		#if android
+		return '/storage/emulated/0/.PsychOnline/mods/';
+		#else
+		return Paths.mods();
+		#end
+	}
+
 	inline public static function getModDirectories():Array<String>
 	{
 		var list:Array<String> = [];
 		#if MODS_ALLOWED
-		var modsFolder:String = Paths.mods();
+		var modsFolder:String = getModsPath();
 		if(FileSystem.exists(modsFolder)) {
 			for (folder in FileSystem.readDirectory(modsFolder))
 			{
@@ -107,21 +116,19 @@ class Mods
 		#if MODS_ALLOWED
 		if(mods)
 		{
-			// Global mods first
+			var modsFolder:String = getModsPath();
 			for(mod in Mods.getGlobalMods())
 			{
-				var folder:String = Paths.mods(mod + '/' + fileToFind);
+				var folder:String = haxe.io.Path.join([modsFolder, mod, fileToFind]);
 				if(FileSystem.exists(folder)) foldersToCheck.push(folder);
 			}
 
-			// Then "PsychEngine/mods/" main folder
-			var folder:String = Paths.mods(fileToFind);
-			if(FileSystem.exists(folder)) foldersToCheck.push(Paths.mods(fileToFind));
+			var folder:String = haxe.io.Path.join([modsFolder, fileToFind]);
+			if(FileSystem.exists(folder)) foldersToCheck.push(folder);
 
-			// And lastly, the loaded mod's folder
 			if(Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0)
 			{
-				var folder:String = Paths.mods(Mods.currentModDirectory + '/' + fileToFind);
+				var folder:String = haxe.io.Path.join([modsFolder, Mods.currentModDirectory, fileToFind]);
 				if(FileSystem.exists(folder)) foldersToCheck.push(folder);
 			}
 		}
@@ -134,7 +141,7 @@ class Mods
 		#if MODS_ALLOWED
 		if(folder == null) folder = Mods.currentModDirectory;
 
-		var path = Paths.mods(folder + '/pack.json');
+		var path = haxe.io.Path.join([getModsPath(), folder, 'pack.json']);
 		if(FileSystem.exists(path)) {
 			try {
 				#if sys
@@ -160,23 +167,25 @@ class Mods
 		try {
 			final toSortModList:Array<Dynamic> = sortByPriority ? [] : null;
 
-			for (mod in CoolUtil.coolTextFile('modsList.txt'))
-			{
-				//trace('Mod: $mod');
-				if(mod.trim().length < 1) continue;
+			var pathList:String = haxe.io.Path.join([getModsPath(), 'modsList.txt']);
+			if (FileSystem.exists(pathList)) {
+				for (mod in CoolUtil.coolTextFile(pathList))
+				{
+					if(mod.trim().length < 1) continue;
 
-				var dat = mod.split("|");
+					var dat = mod.split("|");
 
-				if (sortByPriority) {
-					toSortModList.push([dat[0], dat[1] == "1"]);
-					continue;
+					if (sortByPriority) {
+						toSortModList.push([dat[0], dat[1] == "1"]);
+						continue;
+					}
+					
+					list.all.push(dat[0]);
+					if (dat[1] == "1")
+						list.enabled.push(dat[0]);
+					else
+						list.disabled.push(dat[0]);
 				}
-				
-				list.all.push(dat[0]);
-				if (dat[1] == "1")
-					list.enabled.push(dat[0]);
-				else
-					list.disabled.push(dat[0]);
 			}
 
 			if (sortByPriority) {
@@ -218,9 +227,6 @@ class Mods
 						return (b[1] == true ? 1 : 0) - (a[1] == true ? 1 : 0);
 					}
 
-					// final modACharCode = getModName(a[0], modA).trim().toLowerCase().charCodeAt(0);
-					// final modBCharCode = getModName(b[0], modB).trim().toLowerCase().charCodeAt(0);
-					// return modBCharCode < modACharCode ? 1 : -1;
 					return 0;
 				});
 
@@ -246,37 +252,40 @@ class Mods
 	private static function updateModList()
 	{
 		#if MODS_ALLOWED
-		// Find all that are already ordered
 		var list:Array<Array<Dynamic>> = [];
 		var added:Array<String> = [];
+		var modsFolder:String = getModsPath();
+		var pathList:String = haxe.io.Path.join([modsFolder, 'modsList.txt']);
+
 		try {
-			for (mod in CoolUtil.coolTextFile('modsList.txt'))
-			{
-				var dat:Array<String> = mod.split("|");
-				var folder:String = dat[0];
-				if(folder.trim().length > 0 && FileSystem.exists(Paths.mods(folder)) && FileSystem.isDirectory(Paths.mods(folder)) && !added.contains(folder))
+			if (FileSystem.exists(pathList)) {
+				for (mod in CoolUtil.coolTextFile(pathList))
 				{
-					added.push(folder);
-					list.push([folder, (dat[1] == "1")]);
+					var dat:Array<String> = mod.split("|");
+					var folder:String = dat[0];
+					var folderPath:String = haxe.io.Path.join([modsFolder, folder]);
+					if(folder.trim().length > 0 && FileSystem.exists(folderPath) && FileSystem.isDirectory(folderPath) && !added.contains(folder))
+					{
+						added.push(folder);
+						list.push([folder, (dat[1] == "1")]);
+					}
 				}
 			}
 		} catch(e) {
 			trace(e);
 		}
 		
-		// Scan for folders that aren't on modsList.txt yet
 		for (folder in getModDirectories())
 		{
-			if(folder.trim().length > 0 && FileSystem.exists(Paths.mods(folder)) && FileSystem.isDirectory(Paths.mods(folder)) &&
+			var folderPath:String = haxe.io.Path.join([modsFolder, folder]);
+			if(folder.trim().length > 0 && FileSystem.exists(folderPath) && FileSystem.isDirectory(folderPath) &&
 			!ignoreModFolders.contains(folder.toLowerCase()) && !added.contains(folder))
 			{
 				added.push(folder);
-				list.push([folder, true]); //i like it false by default. -bb //Well, i like it True! -Shadow Mario (2022)
-				//Shadow Mario (2023): What the fuck was bb thinking
+				list.push([folder, true]);
 			}
 		}
 
-		// Now save file
 		var fileStr:String = '';
 		for (values in list)
 		{
@@ -284,9 +293,8 @@ class Mods
 			fileStr += values[0] + '|' + (values[1] ? '1' : '0');
 		}
 
-		File.saveContent('modsList.txt', fileStr);
+		File.saveContent(pathList, fileStr);
 		updatedOnState = true;
-		//trace('Saved modsList.txt');
 		#end
 	}
 
@@ -306,13 +314,14 @@ class Mods
 		tempArray = [];
 
 		#if MODS_ALLOWED
+		var modsFolder:String = getModsPath();
 		var directories:Array<String> = [
-			Paths.mods('stages/'),
-			Paths.mods(Mods.currentModDirectory + '/stages/'),
+			haxe.io.Path.join([modsFolder, 'stages/']),
+			haxe.io.Path.join([modsFolder, Mods.currentModDirectory, 'stages/']),
 			Paths.getPreloadPath('stages/')
 		];
 		for (mod in (allMods ? Mods.parseList().enabled : Mods.getGlobalMods()))
-			directories.push(Paths.mods(mod + '/stages/'));
+			directories.push(haxe.io.Path.join([modsFolder, mod, 'stages/']));
 		#else
 		var directories:Array<String> = [Paths.getPreloadPath('stages/')];
 		#end
@@ -338,7 +347,7 @@ class Mods
 						if (stageToCheck.trim().length > 0 && !tempArray.contains(stageToCheck)) {
 							tempArray.push(stageToCheck);
 							stages.push(stageToCheck);
-							stagePaths.push(directory.substr('mods/'.length, directory.length - ('/stages/'.length + 'mods/'.length)));
+							stagePaths.push(directory.substr(modsFolder.length, directory.length - ('/stages/'.length + modsFolder.length)));
 						}
 					}
 				}
