@@ -3,9 +3,16 @@ package options;
 import objects.CheckboxThingie;
 import objects.AttachedText;
 import options.Option;
+#if mobile
+import mobile.controls.VirtualPad;
+import mobile.controls.FlxButton;
+#end
 
 class BaseOptionsMenu extends MusicBeatSubstate
 {
+	#if mobile
+    public var virtualPad:VirtualPad;
+    #end
 	private var curOption:Option = null;
 	private var curSelected:Int = 0;
 	private var optionsArray:Array<Option>;
@@ -97,6 +104,11 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 		changeSelection();
 		reloadCheckboxes();
+
+		#if mobile
+        virtualPad = new VirtualPad(FULL, A_B);
+        add(virtualPad);
+        #end
 	}
 
 	public function addOption(option:Option) {
