@@ -73,8 +73,8 @@ class HitBox extends FlxSpriteGroup {
 
     private function applyGradientSafe(buttons:Array<HitboxButton>, width:Int, height:Int, isHint:Bool):Void {
         var path:String = isHint 
-            ? 'game/hitbox/hint/hintgradient'
-            : 'game/hitbox/gradient';
+            ? 'mobile/hitbox/hint/hintgradient'
+            : 'mobile/hitbox/gradient';
 
         var frames = Paths.getSparrowAtlas(path);
 
