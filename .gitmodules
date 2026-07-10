@@ -1,3 +1,0 @@
-[submodule "flixel"]
-	path = source/flixel
-	url = https://github.com/Alex-Haxe/flixel-patch.git
