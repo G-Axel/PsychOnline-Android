@@ -1,0 +1,34 @@
+name: Submodule
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo:
+        description: 'Repo'
+        required: true
+        type: string
+      folder_name:
+        description: 'Folder Name'
+        required: true
+        type: string
+      path:
+        description: 'Path'
+        required: true
+        type: string
+      msg:
+        description: 'Desc'
+        required: true
+        type: string
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@://github.com"
+          git submodule add ${{ inputs.repo }} ${{ inputs.path }}/${{ inputs.folder_name }}
+          git commit -m "${{ inputs.msg }}"
+          git push
